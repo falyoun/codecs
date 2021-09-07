@@ -1,4 +1,4 @@
-import { Codec8extendedIoElements, TcpCFDDSPacketBody } from '@app/codecs';
+import { AvlDataCollection, Codec8extendedIoElements } from '@app/codecs';
 import { convertBytesToInt, prepareIOEntity, sanitizeGPS } from '@app/utils';
 import { DdsBaseClass } from '../dds-base-class';
 export class Codec8ex extends DdsBaseClass {
@@ -8,9 +8,8 @@ export class Codec8ex extends DdsBaseClass {
     this._gpsPrecision = 10000000;
   }
 
-  decodeAvlPacket() {
+  decodeAvlPacket(): AvlDataCollection {
     const numberOfRecords1 = convertBytesToInt(this.reader.readBytes(1));
-    const body = {} as TcpCFDDSPacketBody;
     const records = [];
     for (let i = 0; i < numberOfRecords1; i++) {
       let avlRecord = {
@@ -32,7 +31,13 @@ export class Codec8ex extends DdsBaseClass {
       avlRecord.ioElements = this._parseIoElements();
       records.push(avlRecord);
     }
-    return body;
+    const numberOfRecords2 = convertBytesToInt(this.reader.readBytes(1));
+    return {
+      numberOfRecords1,
+      codecId: 142,
+      avlData: records,
+      numberOfRecords2,
+    };
   }
   private _parseIoElements() {
     const ioElement = [];

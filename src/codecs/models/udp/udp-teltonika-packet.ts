@@ -11,5 +11,5 @@ export class UdpPacketHeader {
 }
 export class UdpTeltonikaPacket {
   header: UdpPacketHeader;
-  avlData: AvlDataCollection;
+  avlDataCollection: AvlDataCollection;
 }

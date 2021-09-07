@@ -3,9 +3,10 @@ import {
   DdsBaseClass,
   parseTCPPacketFooter,
   parseTCPPacketHeader,
-  TcpTeltonikaPacket,
+  UdpTeltonikaPacket,
 } from '@app/codecs';
 import { BinaryReader } from 'buffer-sdk';
+import { convertBytesToInt } from '@app/utils';
 
 const testFmbParser = () => {
   /**
@@ -175,8 +176,6 @@ const testFmbParser = () => {
     body,
     footer,
   };
-  // const teltonikaPacketsParser = new TeltonikaPacketsParser(buff);
-  // return teltonikaPacketsParser.decodeTcpData();
 };
 
 describe('Codec 8 parsing packets', () => {
@@ -196,5 +195,35 @@ describe('Codec 8 parsing packets', () => {
     const footer = parseTCPPacketFooter(reader);
     expect({ header, body, footer }).toBeDefined();
   });
-  it('should parse UDP packet', () => {});
+  it('should parse UDP packet', () => {
+    const codec8packet =
+      '003DCAFE0105000F33353230393330383634303336353508010000016B4F815B30010000000000000000000000000000000103021503010101425DBC000001';
+    const buff = Buffer.from(codec8packet, 'hex');
+    const reader = new BinaryReader(buff);
+    const codec: DdsBaseClass = new Codec8(reader);
+    const preamble = convertBytesToInt(reader.readBytes(2));
+    const packetId = convertBytesToInt(reader.readBytes(2));
+    const packetType = convertBytesToInt(reader.readBytes(1));
+    const avlPacketId = convertBytesToInt(reader.readBytes(1));
+    const imeiLength = convertBytesToInt(reader.readBytes(2));
+    const imei = convertBytesToInt(reader.readBytes(imeiLength));
+    const codecId = convertBytesToInt(reader.readBytes(1));
+    const avlDataCollection = codec.decode();
+
+    const udpPacket: UdpTeltonikaPacket = {
+      header: {
+        preamble,
+        packetId,
+        packetType,
+        avlPacketId,
+        imeiLength,
+        imei,
+        codecId,
+      },
+      avlDataCollection,
+    };
+
+    console.log(udpPacket);
+    expect(udpPacket).toBeDefined();
+  });
 });

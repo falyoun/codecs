@@ -1,6 +1,6 @@
 import { DdsBaseClass } from '../dds-base-class';
 import { convertBytesToInt, prepareIOEntity, sanitizeGPS } from '@app/utils';
-import { AvlData, Codec8IoElements, TcpCFDDSPacketBody } from '@app/codecs';
+import { AvlData, AvlDataCollection, Codec8IoElements } from '@app/codecs';
 
 export class Codec8 extends DdsBaseClass {
   private readonly _gpsPrecision: any;
@@ -41,7 +41,7 @@ export class Codec8 extends DdsBaseClass {
     return ioElement;
   }
 
-  decodeAvlPacket(): TcpCFDDSPacketBody {
+  decodeAvlPacket(): AvlDataCollection {
     const numberOfRecords1 = convertBytesToInt(this.reader.readBytes(1));
     const records = [];
     for (let i = 0; i < numberOfRecords1; i++) {

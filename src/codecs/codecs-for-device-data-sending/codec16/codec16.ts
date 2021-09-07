@@ -1,6 +1,6 @@
 import { convertBytesToInt } from '@app/utils';
 import { DdsBaseClass } from '../dds-base-class';
-import { TcpCFDDSPacketBody } from '@app/codecs';
+import { AvlDataCollection } from '@app/codecs';
 
 export class Codec16 extends DdsBaseClass {
   constructor(reader) {
@@ -41,9 +41,8 @@ export class Codec16 extends DdsBaseClass {
     return ioElement;
   }
 
-  decodeAvlPacket(): TcpCFDDSPacketBody {
+  decodeAvlPacket(): AvlDataCollection {
     const numberOfRecords1 = convertBytesToInt(this.reader.readBytes(1));
-    const body = {} as TcpCFDDSPacketBody;
     const records = [];
     for (let i = 0; i < numberOfRecords1; i++) {
       const avlRecord: any = {};
@@ -69,6 +68,11 @@ export class Codec16 extends DdsBaseClass {
 
       records.push(avlRecord);
     }
-    return body;
+    return {
+      codecId: 16,
+      avlData: records,
+      numberOfRecords1,
+      numberOfRecords2: convertBytesToInt(this.reader.readBytes(1)),
+    };
   }
 }
