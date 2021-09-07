@@ -16,6 +16,7 @@ export const parseTCPPacketFooter = (reader: BinaryReader): TcpPacketFooter => {
   return { crc };
 };
 export const parseUDPPacketHeader = (reader: BinaryReader): UdpPacketHeader => {
+
   const preamble = convertBytesToInt(reader.readBytes(2));
   const packetId = convertBytesToInt(reader.readBytes(2));
   const packetType = convertBytesToInt(reader.readBytes(1));

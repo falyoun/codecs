@@ -3,6 +3,7 @@ import {
   DdsBaseClass,
   parseTCPPacketFooter,
   parseTCPPacketHeader,
+  parseUDPPacketHeader,
   UdpTeltonikaPacket,
 } from '@app/codecs';
 import { BinaryReader } from 'buffer-sdk';
@@ -201,29 +202,12 @@ describe('Codec 8 parsing packets', () => {
     const buff = Buffer.from(codec8packet, 'hex');
     const reader = new BinaryReader(buff);
     const codec: DdsBaseClass = new Codec8(reader);
-    const preamble = convertBytesToInt(reader.readBytes(2));
-    const packetId = convertBytesToInt(reader.readBytes(2));
-    const packetType = convertBytesToInt(reader.readBytes(1));
-    const avlPacketId = convertBytesToInt(reader.readBytes(1));
-    const imeiLength = convertBytesToInt(reader.readBytes(2));
-    const imei = convertBytesToInt(reader.readBytes(imeiLength));
-    const codecId = convertBytesToInt(reader.readBytes(1));
+    const header = parseUDPPacketHeader(reader);
     const avlDataCollection = codec.decode();
-
     const udpPacket: UdpTeltonikaPacket = {
-      header: {
-        preamble,
-        packetId,
-        packetType,
-        avlPacketId,
-        imeiLength,
-        imei,
-        codecId,
-      },
+      header,
       avlDataCollection,
     };
-
-    console.log(udpPacket);
     expect(udpPacket).toBeDefined();
   });
 });
