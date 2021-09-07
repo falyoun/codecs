@@ -4,7 +4,6 @@ import {
   convertBytesToInt,
   convertHexToAscii,
 } from '@app/utils';
-import { TeltonikaPacketsParser } from '@app/codecs/teltonika-packets-parser';
 import { CogmBaseClass } from '../cogm-base-class';
 
 /**
@@ -57,9 +56,6 @@ export class Codec14 extends CogmBaseClass {
       response +
       responseQuantity2 +
       CRC;
-    const parser = new TeltonikaPacketsParser(
-      Buffer.from(responsePacket, 'hex'),
-    );
   }
 
   decode(): TcpCFCOGMPacketBody {

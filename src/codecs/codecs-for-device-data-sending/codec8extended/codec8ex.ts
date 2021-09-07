@@ -10,7 +10,8 @@ export class Codec8ex extends DdsBaseClass {
 
   decodeAvlPacket() {
     const numberOfRecords1 = convertBytesToInt(this.reader.readBytes(1));
-    const body = [] as TcpCFDDSPacketBody[];
+    const body = {} as TcpCFDDSPacketBody;
+    const records = [];
     for (let i = 0; i < numberOfRecords1; i++) {
       let avlRecord = {
         timestamp: new Date(convertBytesToInt(this.reader.readBytes(8))),
@@ -29,7 +30,7 @@ export class Codec8ex extends DdsBaseClass {
       } as any;
       avlRecord = sanitizeGPS(avlRecord, this._gpsPrecision);
       avlRecord.ioElements = this._parseIoElements();
-      body.push(avlRecord);
+      records.push(avlRecord);
     }
     return body;
   }

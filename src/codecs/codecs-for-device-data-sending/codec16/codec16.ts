@@ -41,9 +41,10 @@ export class Codec16 extends DdsBaseClass {
     return ioElement;
   }
 
-  decodeAvlPacket(): Array<TcpCFDDSPacketBody> {
+  decodeAvlPacket(): TcpCFDDSPacketBody {
     const numberOfRecords1 = convertBytesToInt(this.reader.readBytes(1));
-    const body = [] as TcpCFDDSPacketBody[];
+    const body = {} as TcpCFDDSPacketBody;
+    const records = [];
     for (let i = 0; i < numberOfRecords1; i++) {
       const avlRecord: any = {};
       avlRecord.timestamp = new Date(
@@ -66,7 +67,7 @@ export class Codec16 extends DdsBaseClass {
         avlRecord.ioElements.push(this._parseIoElements());
       }
 
-      body.push(avlRecord);
+      records.push(avlRecord);
     }
     return body;
   }

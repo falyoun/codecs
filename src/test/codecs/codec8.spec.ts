@@ -1,4 +1,12 @@
-import { TcpTeltonikaPacket } from '@app/codecs';
+import {
+  Codec8,
+  DdsBaseClass,
+  parseTCPPacketFooter,
+  parseTCPPacketHeader,
+  TcpTeltonikaPacket,
+} from '@app/codecs';
+import { BinaryReader } from 'buffer-sdk';
+
 const testFmbParser = () => {
   /**
    * Preamble – the packet starts with four zero bytes.
@@ -63,7 +71,7 @@ const testFmbParser = () => {
 
     const getIoElementsTestData = () => {
       /**
-       * 	Event IO ID – if data is acquired on event – this field defines which IO property has changed and generated an event. For example, when if Ignition state changed and it generate event, Event IO ID will be 0xEF (AVL ID: 239). If it’s not eventual record – the value is 0.
+       *  Event IO ID – if data is acquired on event – this field defines which IO property has changed and generated an event. For example, when if Ignition state changed and it generate event, Event IO ID will be 0xEF (AVL ID: 239). If it’s not eventual record – the value is 0.
        N – a total number of properties coming with record (N = N1 + N2 + N4 + N8).
        N1 – number of properties, which length is 1 byte.
        N2 – number of properties, which length is 2 bytes.
@@ -157,22 +165,36 @@ const testFmbParser = () => {
     CRC_16;
 
   const buff = Buffer.from(packet, 'hex');
+  const reader = new BinaryReader(buff);
+  const header = parseTCPPacketHeader(reader);
+  const codec: DdsBaseClass = new Codec8(reader);
+  const body = codec.decode();
+  const footer = parseTCPPacketFooter(reader);
+  return {
+    header,
+    body,
+    footer,
+  };
   // const teltonikaPacketsParser = new TeltonikaPacketsParser(buff);
   // return teltonikaPacketsParser.decodeTcpData();
 };
 
 describe('Codec 8 parsing packets', () => {
-  it('should parse avl packet correctly', () => {
-    console.log(TcpTeltonikaPacket);
+  it('should parse TCP packet first case', () => {
+    const data = testFmbParser();
+    console.log(data);
+    expect(data).toBeDefined();
   });
-
-  it('Another packet', () => {
+  it('should parse TCP packet second case', () => {
     const codec8packet =
       '000000000000004308020000016B40D57B480100000000000000000000000000000001010101000000000000016B40D5C198010000000000000000000000000000000101010101000000020000252C';
     const buff = Buffer.from(codec8packet, 'hex');
-    // const teltonikaPacketsParser = new TeltonikaPacketsParser(buff);
-    // const data = teltonikaPacketsParser.decodeTcpData();
-    // console.log(data);
-    // expect(data).toBeDefined();
+    const reader = new BinaryReader(buff);
+    const header = parseTCPPacketHeader(reader);
+    const codec: DdsBaseClass = new Codec8(reader);
+    const body = codec.decode();
+    const footer = parseTCPPacketFooter(reader);
+    expect({ header, body, footer }).toBeDefined();
   });
+  it('should parse UDP packet', () => {});
 });

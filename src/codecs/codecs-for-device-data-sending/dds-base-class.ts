@@ -5,9 +5,9 @@ export abstract class DdsBaseClass {
   protected constructor(protected reader: BinaryReader) {
     this.reader = reader;
   }
-  protected abstract decodeAvlPacket(): Array<TcpCFDDSPacketBody>;
+  protected abstract decodeAvlPacket(): TcpCFDDSPacketBody;
 
-  public decode(): Array<TcpCFDDSPacketBody> {
+  public decode(): TcpCFDDSPacketBody {
     return this.decodeAvlPacket();
   }
 }

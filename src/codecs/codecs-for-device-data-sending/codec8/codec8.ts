@@ -1,6 +1,6 @@
 import { DdsBaseClass } from '../dds-base-class';
 import { convertBytesToInt, prepareIOEntity, sanitizeGPS } from '@app/utils';
-import { Codec8IoElements, TcpCFDDSPacketBody } from '@app/codecs';
+import { AvlData, Codec8IoElements, TcpCFDDSPacketBody } from '@app/codecs';
 
 export class Codec8 extends DdsBaseClass {
   private readonly _gpsPrecision: any;
@@ -41,9 +41,9 @@ export class Codec8 extends DdsBaseClass {
     return ioElement;
   }
 
-  decodeAvlPacket(): Array<TcpCFDDSPacketBody> {
+  decodeAvlPacket(): TcpCFDDSPacketBody {
     const numberOfRecords1 = convertBytesToInt(this.reader.readBytes(1));
-    const body = [] as TcpCFDDSPacketBody[];
+    const records = [];
     for (let i = 0; i < numberOfRecords1; i++) {
       let avlRecord = {
         timestamp: new Date(convertBytesToInt(this.reader.readBytes(8))),
@@ -59,12 +59,17 @@ export class Codec8 extends DdsBaseClass {
         event_id: convertBytesToInt(this.reader.readBytes(1)),
         properties_count: convertBytesToInt(this.reader.readBytes(1)),
         ioElements: [],
-      } as any;
+      } as AvlData;
       avlRecord = sanitizeGPS(avlRecord, this._gpsPrecision);
       avlRecord.ioElements = this._parseIoElements();
-      body.push(avlRecord);
+      records.push(avlRecord);
     }
-    // console.log(this.reader.readBytes(1));
-    return body;
+    const numberOfRecords2 = convertBytesToInt(this.reader.readBytes(1));
+    return {
+      codecId: 8,
+      numberOfRecords1,
+      avlData: records,
+      numberOfRecords2,
+    };
   }
 }

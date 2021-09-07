@@ -11,7 +11,7 @@ export class TcpCFCOGMPacketBody {
 export class TcpCFDDSPacketBody {
   public numberOfRecords1: number;
   public codecId: number;
-  public avlData: AvlData;
+  public avlData: AvlData[];
   public numberOfRecords2: number;
   // constructor(
   //   public priority: number,
