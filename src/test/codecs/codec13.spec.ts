@@ -1,4 +1,3 @@
-
 describe('Codec13', () => {
   it('should parse codec 13 packet', () => {
     const codec13packet =

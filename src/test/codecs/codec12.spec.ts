@@ -1,4 +1,3 @@
-
 describe('Codec 12', () => {
   it('Send command test', () => {
     // Test
