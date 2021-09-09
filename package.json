@@ -1,16 +1,16 @@
 {
   "name": "codecs-sdk",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
   "private": false,
   "author": "Abdulrahman Falyoun",
-  "license": "UNLICENSED",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/esm/index.d.ts",
   "files": [
     "/lib"
   ],
+  "license": "MIT",
   "scripts": {
     "pre-publish": "yarn format && yarn build",
     "build": "yarn build:esm && yarn build:cjs",

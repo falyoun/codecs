@@ -7,9 +7,8 @@ import {
   UdpTeltonikaPacket,
 } from '@app/codecs';
 import { BinaryReader } from 'buffer-sdk';
-import { convertBytesToInt } from '@app/utils';
 
-const testFmbParser = () => {
+const createCodec8Packet = () => {
   /**
    * Preamble – the packet starts with four zero bytes.
    Data Field Length – size is calculated starting from Codec ID to Number of Data 2.
@@ -181,7 +180,7 @@ const testFmbParser = () => {
 
 describe('Codec 8 parsing packets', () => {
   it('should parse TCP packet first case', () => {
-    const data = testFmbParser();
+    const data = createCodec8Packet();
     console.log(data);
     expect(data).toBeDefined();
   });
