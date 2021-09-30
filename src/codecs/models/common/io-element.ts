@@ -4,4 +4,5 @@ export class IoElement {
   label: string;
   dimension: string;
   valueHuman: string;
+  type: string;
 }
