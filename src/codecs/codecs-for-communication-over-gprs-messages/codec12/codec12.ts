@@ -6,19 +6,21 @@
 import { convertBytesToInt, convertHexToAscii } from '@app/utils';
 import { Command, TcpCFCOGMPacketBody } from '@app/codecs';
 import { CogmBaseClass } from '../cogm-base-class';
+import { BinaryReader, BinaryWriter } from 'buffer-sdk';
 
 export class Codec12 extends CogmBaseClass {
-  public decode(): TcpCFCOGMPacketBody {
-    const numberOfRecords1 = convertBytesToInt(this.reader.readBytes(1));
+  public decode(packet: Buffer): TcpCFCOGMPacketBody {
+    const reader = new BinaryReader(packet);
+    const numberOfRecords1 = convertBytesToInt(reader.readBytes(1));
     let body = {} as TcpCFCOGMPacketBody;
     for (let i = 0; i < numberOfRecords1; i++) {
-      const commandType = convertBytesToInt(this.reader.readBytes(1));
+      const commandType = convertBytesToInt(reader.readBytes(1));
       if (commandType === 5) {
         // Command message structure
-        const commandSize = convertBytesToInt(this.reader.readBytes(4));
+        const commandSize = convertBytesToInt(reader.readBytes(4));
         let command = '';
         for (let i = 0; i < commandSize; i++) {
-          command += convertHexToAscii(this.reader.readBytes(1) as any);
+          command += convertHexToAscii(reader.readBytes(1) as any);
         }
         console.log('command: ', command);
         body = {
@@ -30,10 +32,10 @@ export class Codec12 extends CogmBaseClass {
 
       if (commandType === 6) {
         // Response message structure
-        const responseSize = convertBytesToInt(this.reader.readBytes(4));
+        const responseSize = convertBytesToInt(reader.readBytes(4));
         let response = '';
         for (let i = 0; i < responseSize; i++) {
-          response += convertHexToAscii(this.reader.readBytes(1) as any);
+          response += convertHexToAscii(reader.readBytes(1) as any);
         }
         console.log('response: ', response);
         body = {
@@ -47,17 +49,13 @@ export class Codec12 extends CogmBaseClass {
   }
 
   public encode(command: Command): Buffer {
-    this.writer.writeInt32(12);
-    this.writer.writeInt32(1); // Command count
-    this.writer.writeInt32(command.id);
-    this.writer.writeInt32(command.data.length);
-    this.writer.writeBytes(command.data);
-    this.writer.writeInt32(1); // Command count
-    console.log(this.writer.byteBuffer);
-    return this.writer.byteBuffer;
-  }
-
-  constructor(reader, writer) {
-    super(reader, writer);
+    const writer = new BinaryWriter();
+    writer.writeInt32(12);
+    writer.writeInt32(1); // Command count
+    writer.writeInt32(command.id);
+    writer.writeInt32(command.data.length);
+    writer.writeBytes(command.data);
+    writer.writeInt32(1); // Command count
+    return writer.byteBuffer;
   }
 }
