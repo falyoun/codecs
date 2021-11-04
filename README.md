@@ -14,6 +14,7 @@ To use this library correctly and parse packets related to above codecs you have
 
 <h3>Parsing Header</h3>
 To parse the header using this library you have to call the method ``parseTCPPacketHeader`` or ``parseUDPPacketHeader``, their implementation:
+
 ```typescript
 // TCP
 export class TcpPacketHeader {
@@ -67,6 +68,7 @@ You should parse the body-AVL Records- which is the same for all codecs and prot
 <h3>Parsing footer</h3> 
 You should consider parsing footer via `parseTCPPacketFooter` which is only available for ***TCP***  as ***UDP*** does not contain footer
 
+
 ```typescript
 export const parseTCPPacketFooter = (reader: BinaryReader): TcpPacketFooter => {
   const crc = reader.readInt32();
@@ -75,6 +77,7 @@ export const parseTCPPacketFooter = (reader: BinaryReader): TcpPacketFooter => {
 ```
 
 <h3>Checking packets correctness via CRC-16 checker</h3>
+
 ```typescript
 export const calculateCRC = (
   buffer,
@@ -103,10 +106,11 @@ export const calculateCRC = (
 
 if(crcParsedFromPacet != calculateCRC(packetData)) 
   throw new Error(`Packet does not consist of the correct data as CRC-16 checking failed`)
-
 ```
 > In the following section you will find an implementation example which clarify the packets
+
 ### Codec 8
+
 
 
 ```typescript

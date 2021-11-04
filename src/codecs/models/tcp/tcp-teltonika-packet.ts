@@ -7,7 +7,6 @@ export class TcpCFCOGMPacketBody {
   command: string;
 }
 
-
 export class TcpPacketHeader {
   preamble: number;
   length: number;
