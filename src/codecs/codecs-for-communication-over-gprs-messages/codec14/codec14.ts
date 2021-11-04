@@ -4,7 +4,6 @@ import {
   convertBytesToInt,
   convertHexToAscii,
 } from '@app/utils';
-import { BinaryReader, BinaryWriter } from 'buffer-sdk';
 import { CogmBaseClass } from '../cogm-base-class';
 
 /**
@@ -13,6 +12,10 @@ import { CogmBaseClass } from '../cogm-base-class';
  * Codec14 GPRS commands can be used for sending configuration, debug, digital outputs control commands or other (special purpose command on special firmware versions).
  */
 export class Codec14 extends CogmBaseClass {
+  constructor(reader, writer) {
+    super(reader, writer);
+  }
+
   sendCommand(command: string) {
     const bytes = convertAsciiToBinary(command);
     // const zeros = '00000000';
@@ -55,12 +58,11 @@ export class Codec14 extends CogmBaseClass {
       CRC;
   }
 
-  decode(data: Buffer): TcpCFCOGMPacketBody {
-    const reader = new BinaryReader(data);
-    const numberOfRecords1 = convertBytesToInt(reader.readBytes(1));
+  decode(): TcpCFCOGMPacketBody {
+    const numberOfRecords1 = convertBytesToInt(this.reader.readBytes(1));
     let body = {} as TcpCFCOGMPacketBody;
     for (let i = 0; i < numberOfRecords1; i++) {
-      const messageType = convertBytesToInt(reader.readBytes(1));
+      const messageType = convertBytesToInt(this.reader.readBytes(1));
       // 0x06(6 in decimal) (if it is ACK) or 0x11(17 in decimal) (if it is nACK)
       if (messageType === 17) {
         throw new Error('Not acknowledgement from device');
@@ -68,11 +70,11 @@ export class Codec14 extends CogmBaseClass {
       if (messageType === 6) {
         // Acknowledgement from device
         // Response message structure
-        const responseSize = convertBytesToInt(reader.readBytes(4));
-        const imei = convertBytesToInt(reader.readBytes(8));
+        const responseSize = convertBytesToInt(this.reader.readBytes(4));
+        const imei = convertBytesToInt(this.reader.readBytes(8));
         let response = '';
         for (let i = 0; i < responseSize; i++) {
-          const byte = reader.readBytes(1);
+          const byte = this.reader.readBytes(1);
           response += convertHexToAscii(byte as any);
         }
         body = {
@@ -86,14 +88,13 @@ export class Codec14 extends CogmBaseClass {
     return body;
   }
   public encode(command: Command): Buffer {
-    const writer = new BinaryWriter();
-    writer.writeInt32(14);
-    writer.writeInt32(1); // Command count
-    writer.writeInt32(command.id);
-    writer.writeInt32(command.data.length);
-    writer.writeBytes(command.data);
-    writer.writeInt32(1); // Command count
-    console.log(writer.byteBuffer);
-    return writer.byteBuffer;
+    this.writer.writeInt32(14);
+    this.writer.writeInt32(1); // Command count
+    this.writer.writeInt32(command.id);
+    this.writer.writeInt32(command.data.length);
+    this.writer.writeBytes(command.data);
+    this.writer.writeInt32(1); // Command count
+    console.log(this.writer.byteBuffer);
+    return this.writer.byteBuffer;
   }
 }
