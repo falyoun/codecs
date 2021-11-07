@@ -1,5 +1,5 @@
 import { GpsElement } from '@app/codecs';
-import { getPacketType } from "@app/utils/packet-type-checker";
+import { getPacketType } from '@app/utils/packet-type-checker';
 
 export const sanitizeLongLat = (
   gpsElement: GpsElement,
@@ -41,6 +41,6 @@ export const prepareIOEntity = (property_id, value, ioElements: any) => {
     label,
     dimension,
     valueHuman,
-    type
+    type,
   };
 };
