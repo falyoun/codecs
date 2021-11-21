@@ -1,4 +1,4 @@
-export const Codec8extendedIoElements = {
+export const IoElements = {
   1: {
     label: 'Din 1',
     values: {
@@ -335,14 +335,6 @@ export const Codec8extendedIoElements = {
     values: {
       0: 'Trip Ended',
       1: 'Trip Started',
-      2: 'Business Status',
-      3: 'Private Status',
-      4: 'Custom Statuses',
-      5: 'Custom Statuses',
-      6: 'Custom Statuses',
-      7: 'Custom Statuses',
-      8: 'Custom Statuses',
-      9: 'Custom Statuses',
     },
   },
   251: {

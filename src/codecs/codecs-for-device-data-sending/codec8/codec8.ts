@@ -1,7 +1,7 @@
 import { DdsBaseClass } from '../dds-base-class';
 import { convertBytesToInt, prepareIOEntity, sanitizeGPS } from '@app/utils';
-import { AvlData, AvlDataCollection, Codec8IoElements } from '@app/codecs';
-
+import { AvlData, AvlDataCollection } from '@app/codecs';
+import { IoElements } from '@app/codecs/codecs-for-device-data-sending/io-elements';
 export class Codec8 extends DdsBaseClass {
   private readonly _gpsPrecision: any;
   constructor(reader: any) {
@@ -14,28 +14,28 @@ export class Codec8 extends DdsBaseClass {
     for (let i = 0; i < ioCountInt8; i++) {
       const property_id = convertBytesToInt(this.reader.readBytes(1));
       const value = convertBytesToInt(this.reader.readBytes(1));
-      ioElement.push(prepareIOEntity(property_id, value, Codec8IoElements));
+      ioElement.push(prepareIOEntity(property_id, value, IoElements));
     }
 
     const ioCountInt16 = convertBytesToInt(this.reader.readBytes(1));
     for (let i = 0; i < ioCountInt16; i++) {
       const property_id = convertBytesToInt(this.reader.readBytes(1));
       const value = this.reader.readInt16();
-      ioElement.push(prepareIOEntity(property_id, value, Codec8IoElements));
+      ioElement.push(prepareIOEntity(property_id, value, IoElements));
     }
 
     const ioCountInt32 = convertBytesToInt(this.reader.readBytes(1));
     for (let i = 0; i < ioCountInt32; i++) {
       const property_id = convertBytesToInt(this.reader.readBytes(1));
       const value = this.reader.readInt32();
-      ioElement.push(prepareIOEntity(property_id, value, Codec8IoElements));
+      ioElement.push(prepareIOEntity(property_id, value, IoElements));
     }
 
     const ioCountInt64 = convertBytesToInt(this.reader.readBytes(1));
     for (let i = 0; i < ioCountInt64; i++) {
       const property_id = convertBytesToInt(this.reader.readBytes(1));
       const value = this.reader.readDouble();
-      ioElement.push(prepareIOEntity(property_id, value, Codec8IoElements));
+      ioElement.push(prepareIOEntity(property_id, value, IoElements));
     }
 
     return ioElement;

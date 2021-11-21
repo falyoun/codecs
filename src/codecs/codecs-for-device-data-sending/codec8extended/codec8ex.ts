@@ -1,4 +1,5 @@
-import { AvlDataCollection, Codec8extendedIoElements } from '@app/codecs';
+import { AvlDataCollection } from '@app/codecs';
+import { IoElements } from '@app/codecs/codecs-for-device-data-sending/io-elements';
 import { convertBytesToInt, prepareIOEntity, sanitizeGPS } from '@app/utils';
 import { DdsBaseClass } from '../dds-base-class';
 export class Codec8ex extends DdsBaseClass {
@@ -48,9 +49,7 @@ export class Codec8ex extends DdsBaseClass {
       for (let i = 0; i < ioCountInt8; i++) {
         const property_id = convertBytesToInt(this.reader.readBytes(2));
         const value = convertBytesToInt(this.reader.readBytes(1));
-        ioElement.push(
-          prepareIOEntity(property_id, value, Codec8extendedIoElements),
-        );
+        ioElement.push(prepareIOEntity(property_id, value, IoElements));
       }
     })();
 
@@ -60,9 +59,7 @@ export class Codec8ex extends DdsBaseClass {
       for (let i = 0; i < ioCountInt16; i++) {
         const property_id = convertBytesToInt(this.reader.readBytes(2));
         const value = this.reader.readInt16();
-        ioElement.push(
-          prepareIOEntity(property_id, value, Codec8extendedIoElements),
-        );
+        ioElement.push(prepareIOEntity(property_id, value, IoElements));
       }
     })();
 
@@ -72,9 +69,7 @@ export class Codec8ex extends DdsBaseClass {
       for (let i = 0; i < ioCountInt32; i++) {
         const property_id = convertBytesToInt(this.reader.readBytes(2));
         const value = this.reader.readInt32();
-        ioElement.push(
-          prepareIOEntity(property_id, value, Codec8extendedIoElements),
-        );
+        ioElement.push(prepareIOEntity(property_id, value, IoElements));
       }
     })();
 
@@ -84,9 +79,7 @@ export class Codec8ex extends DdsBaseClass {
       for (let i = 0; i < ioCountInt64; i++) {
         const property_id = convertBytesToInt(this.reader.readBytes(2));
         const value = this.reader.readDouble();
-        ioElement.push(
-          prepareIOEntity(property_id, value, Codec8extendedIoElements),
-        );
+        ioElement.push(prepareIOEntity(property_id, value, IoElements));
       }
     })();
 
@@ -99,9 +92,7 @@ export class Codec8ex extends DdsBaseClass {
         const value = (this as any).toString(
           this.reader.readBytes(ioValueLength),
         );
-        ioElement.push(
-          prepareIOEntity(property_id, value, Codec8extendedIoElements),
-        );
+        ioElement.push(prepareIOEntity(property_id, value, IoElements));
       }
     })();
     return ioElement;
