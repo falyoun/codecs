@@ -18,12 +18,10 @@ export class Codec13 extends CogmBaseClass {
         // Command message structure
         const commandSize = convertBytesToInt(reader.readBytes(4));
         const timestamp = new Date(convertBytesToInt(reader.readBytes(4)));
-        console.log('timestamp: ', timestamp);
         let command = '';
         for (let i = 0; i < commandSize; i++) {
           command += convertHexToAscii(reader.readBytes(1) as any);
         }
-        console.log('command: ', command);
         body = {
           command,
           commandType,

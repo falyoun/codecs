@@ -1,4 +1,4 @@
-import { AvlDataCollection } from '@app/codecs';
+import { AvlDataCollection, IoElementsObj } from '@app/codecs';
 import { IoElements } from '@app/codecs/codecs-for-device-data-sending/io-elements';
 import { convertBytesToInt, prepareIOEntity, sanitizeGPS } from '@app/utils';
 import { DdsBaseClass } from '../dds-base-class';
@@ -40,7 +40,7 @@ export class Codec8ex extends DdsBaseClass {
       numberOfRecords2,
     };
   }
-  private _parseIoElements() {
+  private _parseIoElements() : IoElementsObj {
     const ioElement = [];
 
     // 1 byte
@@ -95,6 +95,8 @@ export class Codec8ex extends DdsBaseClass {
         ioElement.push(prepareIOEntity(property_id, value, IoElements));
       }
     })();
-    return ioElement;
-  }
+    return ioElement.reduce((acc,io)=>{
+      acc[io.label] = io;
+      return acc;
+    },{});  }
 }

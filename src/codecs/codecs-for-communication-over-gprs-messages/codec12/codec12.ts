@@ -22,7 +22,6 @@ export class Codec12 extends CogmBaseClass {
         for (let i = 0; i < commandSize; i++) {
           command += convertHexToAscii(reader.readBytes(1) as any);
         }
-        console.log('command: ', command);
         body = {
           command,
           commandSize,
@@ -37,7 +36,6 @@ export class Codec12 extends CogmBaseClass {
         for (let i = 0; i < responseSize; i++) {
           response += convertHexToAscii(reader.readBytes(1) as any);
         }
-        console.log('response: ', response);
         body = {
           command: response,
           commandSize: responseSize,

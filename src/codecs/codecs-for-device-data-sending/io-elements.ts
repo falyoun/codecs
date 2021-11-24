@@ -873,7 +873,7 @@ export const IoElements = {
       3: 'Overspeeding Start',
     },
   },
-};
+} as const;
 
 export const GeofenceIoLabels = [
   'Geofence Zone 1',
@@ -926,4 +926,6 @@ export const GeofenceIoLabels = [
   'Geofence Zone 48',
   'Geofence Zone 49',
   'Geofence Zone 50',
-];
+] as const;
+
+export type GeofenceLabel = (typeof GeofenceIoLabels)[number];

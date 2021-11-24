@@ -27,7 +27,6 @@ export class Codec14 extends CogmBaseClass {
     // const CRC = '0000D2C1';
     //
     // console.log('Command: ', convertAsciiToBinary(command)); // Should print 'getver'
-    console.log('bytes: ', bytes);
   }
 
   getDeviceResponse() {
@@ -80,7 +79,6 @@ export class Codec14 extends CogmBaseClass {
           commandSize: responseSize,
           commandType: messageType,
         };
-        console.log('response: ', response);
       }
     }
     return body;

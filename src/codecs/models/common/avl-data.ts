@@ -1,4 +1,5 @@
-import { GpsElement, IoElement } from '@app/codecs';
+import { GpsElement } from '@app/codecs';
+import { IoElementsObj } from './io-element';
 
 export class AvlData {
   public priority: number;
@@ -6,5 +7,5 @@ export class AvlData {
   public gps: GpsElement;
   public event_id: number;
   public properties_count: number;
-  public ioElements: IoElement[];
+  public ioElements: IoElementsObj;
 }

@@ -1,6 +1,6 @@
 import { DdsBaseClass } from '../dds-base-class';
 import { convertBytesToInt, prepareIOEntity, sanitizeGPS } from '@app/utils';
-import { AvlData, AvlDataCollection } from '@app/codecs';
+import { AvlData, AvlDataCollection, IoElementsObj } from '@app/codecs';
 import { IoElements } from '@app/codecs/codecs-for-device-data-sending/io-elements';
 export class Codec8 extends DdsBaseClass {
   private readonly _gpsPrecision: any;
@@ -8,7 +8,7 @@ export class Codec8 extends DdsBaseClass {
     super(reader);
     this._gpsPrecision = 10000000;
   }
-  private _parseIoElements() {
+  private _parseIoElements() : IoElementsObj {
     const ioElement = [];
     const ioCountInt8 = convertBytesToInt(this.reader.readBytes(1));
     for (let i = 0; i < ioCountInt8; i++) {
@@ -38,7 +38,10 @@ export class Codec8 extends DdsBaseClass {
       ioElement.push(prepareIOEntity(property_id, value, IoElements));
     }
 
-    return ioElement;
+    return ioElement.reduce((acc,io)=>{
+      acc[io.label] = io;
+      return acc;
+    },{});
   }
 
   decodeAvlPacket(): AvlDataCollection {
@@ -58,7 +61,7 @@ export class Codec8 extends DdsBaseClass {
         },
         event_id: convertBytesToInt(this.reader.readBytes(1)),
         properties_count: convertBytesToInt(this.reader.readBytes(1)),
-        ioElements: [],
+        ioElements: {},
       } as AvlData;
       avlRecord = sanitizeGPS(avlRecord, this._gpsPrecision);
       avlRecord.ioElements = this._parseIoElements();
