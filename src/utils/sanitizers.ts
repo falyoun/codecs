@@ -37,7 +37,9 @@ export const prepareIOEntity = (property_id, value, ioElements: any) => {
   const type = getPacketType(property_id);
   return {
     id: property_id,
-    value,
+    value: ioElements[property_id].transformFn
+      ? ioElements[property_id].transformFn(value)
+      : value,
     label,
     dimension,
     valueHuman,

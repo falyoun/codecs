@@ -40,7 +40,7 @@ export class Codec8ex extends DdsBaseClass {
       numberOfRecords2,
     };
   }
-  private _parseIoElements() : IoElementsObj {
+  private _parseIoElements(): IoElementsObj {
     const ioElement = [];
 
     // 1 byte
@@ -89,14 +89,13 @@ export class Codec8ex extends DdsBaseClass {
       for (let i = 0; i < ioCountIntX; i++) {
         const property_id = convertBytesToInt(this.reader.readBytes(2));
         const ioValueLength = convertBytesToInt(this.reader.readBytes(2));
-        const value = (this as any).toString(
-          this.reader.readBytes(ioValueLength),
-        );
+        const value = this.reader.readBytes(ioValueLength);
         ioElement.push(prepareIOEntity(property_id, value, IoElements));
       }
     })();
-    return ioElement.reduce((acc,io)=>{
+    return ioElement.reduce((acc, io) => {
       acc[io.label] = io;
       return acc;
-    },{});  }
+    }, {});
+  }
 }

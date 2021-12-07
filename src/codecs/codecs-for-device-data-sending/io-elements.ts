@@ -1,3 +1,7 @@
+function asciiTransform(buff: Buffer) {
+  return buff.toString('ascii');
+}
+
 export const IoElements = {
   1: {
     label: 'Din 1',
@@ -90,14 +94,6 @@ export const IoElements = {
   30: {
     label: 'Number of DTC',
   },
-  31: {
-    label: 'Calculated engine load value',
-    dimension: '%',
-  },
-  32: {
-    label: 'Engine coolant temperature',
-    dimension: 'C',
-  },
   33: {
     label: 'Short term fuel trim 1',
     dimension: '%',
@@ -110,10 +106,6 @@ export const IoElements = {
     label: 'Intake manifold absolute pressure',
     dimension: 'kPa',
   },
-  36: {
-    label: 'Engine RPM',
-    dimension: 'rpm',
-  },
   37: {
     label: 'Vehicle speed',
     dimension: 'km/h',
@@ -122,17 +114,9 @@ export const IoElements = {
     label: 'Timing advance',
     dimension: 'O',
   },
-  39: {
-    label: 'Intake air temperature',
-    dimension: 'C',
-  },
   40: {
     label: 'MAF air flow rate',
     dimension: 'g/sec, *0.01',
-  },
-  41: {
-    label: 'Throttle position',
-    dimension: '%',
   },
   42: {
     label: 'Run time since engine start',
@@ -158,17 +142,9 @@ export const IoElements = {
     label: 'EGR error',
     dimension: '%',
   },
-  48: {
-    label: 'Fuel level',
-    dimension: '%',
-  },
   49: {
     label: 'Distance traveled since codes cleared',
     dimension: 'Km',
-  },
-  50: {
-    label: 'Barometric pressure',
-    dimension: 'kPa',
   },
   51: {
     label: 'Control module voltage',
@@ -211,7 +187,7 @@ export const IoElements = {
     dimension: 'L/h, *100',
   },
   66: {
-    label: 'Ext Voltage',
+    label: 'External Voltage',
     dimension: 'mV',
   },
   67: {
@@ -259,7 +235,7 @@ export const IoElements = {
     dimension: '%RH',
   },
   113: {
-    label: 'FM battery level',
+    label: 'Battery Level',
     dimesion: '%',
   },
   181: {
@@ -365,9 +341,6 @@ export const IoElements = {
   255: {
     label: 'Overspeeding Event',
     dimension: 'km/h',
-  },
-  256: {
-    label: 'VIN',
   },
 
   281: {
@@ -873,6 +846,40 @@ export const IoElements = {
       3: 'Overspeeding Start',
     },
   },
+
+  // OBD
+  48: {
+    label: 'Fuel Level',
+    dimension: '%',
+  },
+  50: {
+    label: 'Barometric Pressure',
+    dimension: 'kPa',
+  },
+  256: {
+    label: 'VIN',
+    transformFn: asciiTransform,
+  },
+  41: {
+    label: 'Throttle Position',
+    dimension: '%',
+  },
+  39: {
+    label: 'Intake Air Temperature',
+    dimension: '°C',
+  },
+  36: {
+    label: 'Engine RPM',
+    dimension: 'rpm',
+  },
+  31: {
+    label: 'Engine Load',
+    dimension: '%',
+  },
+  32: {
+    label: 'Coolant Temperature',
+    dimension: '°C',
+  },
 } as const;
 
 export const GeofenceIoLabels = [
@@ -928,4 +935,23 @@ export const GeofenceIoLabels = [
   'Geofence Zone 50',
 ] as const;
 
-export type GeofenceLabel = (typeof GeofenceIoLabels)[number];
+export const ObdIoLabels = [
+  'Fuel Level',
+  'Barometric Pressure',
+  'VIN',
+  'Throttle Position',
+  'Engine RPM',
+  'Intake Air Temperature',
+  'Engine Load',
+  'Coolant Temperature',
+] as const;
+
+export const DeviceStatusIoLabels = [
+  'GSM Signal Strength',
+  'External Voltage',
+  'Battery Voltage',
+  'Battery Level',
+] as const;
+
+export type GeofenceLabel = typeof GeofenceIoLabels[number];
+export type ObdLabel = typeof ObdIoLabels[number];
