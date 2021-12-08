@@ -2,7 +2,7 @@ import { IoElements, PacketTypesEnum } from '@app/codecs';
 
 export class IoElement {
   id: number;
-  value: number;
+  value: any;
   label: string;
   dimension: string;
   valueHuman: string;
