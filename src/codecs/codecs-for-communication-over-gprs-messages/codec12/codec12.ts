@@ -9,8 +9,7 @@ import { CogmBaseClass } from '../cogm-base-class';
 import { BinaryReader, BinaryWriter } from 'buffer-sdk';
 
 export class Codec12 extends CogmBaseClass {
-  public decode(packet: Buffer): TcpCFCOGMPacketBody[] {
-    const reader = new BinaryReader(packet);
+  public decode(reader: BinaryReader): TcpCFCOGMPacketBody[] {
     const numberOfRecords1 = convertBytesToInt(reader.readBytes(1));
     const result = [] as TcpCFCOGMPacketBody[];
     for (let i = 0; i < numberOfRecords1; i++) {
