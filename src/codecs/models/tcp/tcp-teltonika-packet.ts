@@ -2,7 +2,6 @@
 import { AvlData } from '@app/codecs';
 
 export class TcpCFCOGMPacketBody {
-  commandType: number;
   commandSize: number;
   command: string;
 }

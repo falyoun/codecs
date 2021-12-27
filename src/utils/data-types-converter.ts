@@ -10,7 +10,7 @@ export const convertBytesToAscii = (
 export const convertHexToAscii = (
   hexString: string,
   numeralSystem: BufferEncoding = 'hex',
-) => <string>Buffer.from(hexString, numeralSystem).toString('utf-8');
+) => <string>Buffer.from(hexString, numeralSystem).toString('ascii');
 export const convertAsciiToBinary = (asciiString: string, radix = 2) =>
   asciiString.split('').map((char) => char.charCodeAt(0).toString(radix));
 export const isSpecificBitSet = (bitIndex: number, buff: Buffer) =>
