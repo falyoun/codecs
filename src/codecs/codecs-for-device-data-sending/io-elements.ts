@@ -5,11 +5,29 @@ function asciiTransform(buff: Buffer) {
 export const IoElements = {
   1: {
     label: 'Din 1',
-    values: {
-      0: '0',
-      1: '1',
-    },
   },
+  2: {
+    label: 'Din 2',
+  },
+  3: {
+    label: 'Din 3',
+  },
+  9: {
+    label: 'Ain 1',
+  },
+  6: {
+    label: 'Ain 2',
+  },
+  262: {
+    label: 'Din 4',
+  },
+  179: {
+    label: 'Dout 1',
+  },
+  180: {
+    label: 'Dout 2',
+  },
+
   10: {
     label: 'SD Status',
     values: {
